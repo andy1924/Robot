@@ -169,10 +169,8 @@ function setupEventListeners() {
 function animate() {
     requestAnimationFrame(animate);
 
-    // Rotate the model continuously around the y-axis
-    if (model) {
-        model.rotation.y += 0.003;
-    }
+    // Remove the automatic model rotation
+    // model.rotation.y += 0.003; // Comment out or remove this line
 
     // Update controls if available
     if (controls) {
