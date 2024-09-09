@@ -11,11 +11,13 @@ let dark = false;
 // Entry point to initialize the application
 function init() {
     setupScene(); // Setup 3D scene
+    loadModel('models/lowpoly_backpack/scene.gltf');
     setupRenderer(); // Setup WebGL renderer
     setupLights(); // Setup ambient and directional lights
     setupEventListeners(); // Setup event listeners
     animate(); // Start animation loop
 }
+
 
 
 // Function to set up the 3D scene
@@ -43,38 +45,27 @@ function loadModel(modelPath) {
             if (model) {
                 scene.remove(model); // Remove the previous model from the scene
             }
-
-            if (modelPath === "lowpoly_backpack/scene.gltf"){
-                cameraDistance = 1;
-            } else if (modelPath === "sugarcube_corner/scene.gltf"){
-                cameraDistance = 5;
-            } else if (modelPath === "2x2_cube/scene.gltf"){
-                cameraDistance = 2;
-            } else if (modelPath === "forest_house/scene.gltf"){
-                cameraDistance = 15;
-            }
+            
             model = gltf.scene;
             scene.add(model);
 
-            // Automatically center the model
+            // Auto-center the model
             const bbox = new THREE.Box3().setFromObject(model);
             const center = bbox.getCenter(new THREE.Vector3());
             model.position.sub(center);
 
-            // Apply smooth shading to model materials
+            // Apply smooth shading
             model.traverse((child) => {
                 if (child.isMesh) {
-                    child.castShadow = true; // Enable shadow casting
-                    child.receiveShadow = true; // Enable shadow receiving
-
-                    // Adjust material properties for better shadow effects
-                    child.material.flatShading = true; // Apply flat shading
-                    child.material.side = THREE.DoubleSide; // Ensure both sides of geometry receive shadows
+                    child.castShadow = true;
+                    child.receiveShadow = true;
+                    child.material.flatShading = true; 
+                    child.material.side = THREE.DoubleSide;
                 }
             });
 
-             // Update camera position
-             camera.position.copy(center.clone().add(new THREE.Vector3(cameraDistance, cameraDistance / 2, cameraDistance)));
+            // Update camera
+            camera.position.copy(center.clone().add(new THREE.Vector3(cameraDistance, cameraDistance / 2, cameraDistance)));
 
             // Setup orbit controls
             controls = new THREE.OrbitControls(camera, renderer.domElement);
@@ -83,26 +74,25 @@ function loadModel(modelPath) {
             controls.enableZoom = true;
         },
         undefined,
-        //Handling errors in loading the model
         function (error) {
             console.error('Error loading model:', error);
         }
     );
 }
 
-
 // Function to set up the WebGL renderer
 function setupRenderer() {
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     
-    // Set the pixel ratio to match the device's pixel density for better rendering on high-resolution displays
+    // Set the pixel ratio to match the device's pixel density
     renderer.setPixelRatio(window.devicePixelRatio);
-    // Set the background color of the renderer, during night its dark blue and at day it is sky blue
-    renderer.setClearColor(0x191970);
-        
-    renderer.shadowMap.enabled = true; // Enable shadow mapping in the renderer
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows for smoother edges
+    
+    // Change the background color to off-white
+    renderer.setClearColor(0xf5f5f5); // Off-white color
+
+    renderer.shadowMap.enabled = true; // Enable shadow mapping
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows
 
     document.body.appendChild(renderer.domElement);
 }
