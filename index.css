@@ -4,7 +4,7 @@
 body { 
     margin: 0; 
     overflow: hidden; 
-    background-color: #191970;
+    background-color: #d4d4e0;
 }
 
 /*Canvas*/
@@ -34,7 +34,7 @@ canvas {
 
 /*CSS keyframes for border-color animation*/
 @keyframes writing_space {
-    0%   {border-color: rgb(22, 20, 152);}
+    0%   {border-color: rgb(194, 194, 204);}
     25%  {border-color: rgb(226, 43, 208)}
     50%  {border-color: rgb(167, 59, 207);}
     100% {border-color: rgb(18, 87, 128);}
